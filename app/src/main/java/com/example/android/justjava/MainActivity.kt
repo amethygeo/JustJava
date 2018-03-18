@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     var quantity: Int = 0
+    var pricePerCoffee = 5
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,25 +34,36 @@ class MainActivity : AppCompatActivity() {
      */
     fun submitOrder(view: View) {
         Int
-        val price = calculatePrice(quantity)
+        var price = calculatePrice(quantity)
+        String
+        var priceMessage = createOrderSummary(price)
+        displayMessage(priceMessage)
+    }
 
+    /**
+     * This method is called when the total price is calculated.
+     *
+     * @return total price
+     */
+    fun calculatePrice(numberOfCoffee: Int): Int {
+        return numberOfCoffee * pricePerCoffee
+
+    }
+
+    /**
+     * This method is called to create the order summary.
+     *
+     * @return Summary
+     */
+    fun createOrderSummary(totalPrice: Int): String {
         String
         var priceMessage = "Name: Amethyst George Solomon " +
                 "\nAdd Whipped Cream " + quantity +
                 "\nQuantity: " + quantity +
-                "\nTotal: " + "$" + price
-        priceMessage = priceMessage + "\nThank You!"
-        displayMessage(priceMessage)
+                "\nTotal: " + "$" + totalPrice +
+                "\nThank You!"
+        return priceMessage
     }
-    /**
-     * This method is called when the total price is calculated.
-     */
-    fun calculatePrice(number: Int): Int {
-        Int
-        val totalPrice = quantity * 5
-        return totalPrice
-    }
-
 
     /**
      * This method is called when the plus button is clicked.
@@ -72,24 +84,16 @@ class MainActivity : AppCompatActivity() {
     /**
      * This method displays the given quantity value on the screen.
      */
-    private fun displayQuantity(number: Int) {
+    private fun displayQuantity(numberOfCoffee: Int) {
         val quantityTextView = findViewById<View>(R.id.quantity_text_view) as TextView
-        quantityTextView.text = "" + number
-    }
-
-    /**
-     * This method displays the given price on the screen.
-     */
-    private fun displayPrice(number: Int) {
-        val priceTextView = findViewById<View>(R.id.price_text_view) as TextView
-        priceTextView.setText(NumberFormat.getCurrencyInstance().format(number))
+        quantityTextView.text = "" + numberOfCoffee
     }
 
     /**
      * This method displays the given text on the screen.
      */
     private fun displayMessage(message: String) {
-        val priceTextView = findViewById<View>(R.id.price_text_view) as TextView
-        priceTextView.text = message
+        val orderSummaryTextView = findViewById<View>(R.id.order_summary_text_view) as TextView
+        orderSummaryTextView.text = message
     }
 }
