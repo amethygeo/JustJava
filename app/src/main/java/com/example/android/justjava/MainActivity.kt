@@ -11,9 +11,11 @@ package com.example.android.justjava
 import java.text.NumberFormat;
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     var quantity: Int = 0
     var pricePerCoffee = 5
     var hasWhippedCream: Boolean = false
+    var hasChocolate: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,14 +38,16 @@ class MainActivity : AppCompatActivity() {
      * This method is called when the order button is clicked.
      */
     fun submitOrder(view: View) {
+        var nameTextView = findViewById<View>(R.id.name_id) as EditText
+        var nameText: Editable = nameTextView.text
         val whippedCreamCheckBox = findViewById<CheckBox>(R.id.whippedCreamCheckboxid)
-        Log.i("SubmitOrder","outside whipped cream check")
-        if (whippedCreamCheckBox.isChecked){
-            hasWhippedCream = true
-        }
+        hasWhippedCream = whippedCreamCheckBox.isChecked
+
+        val chocolateCheckBox = findViewById<CheckBox>(R.id.chocolateCheckboxid)
+        hasChocolate = chocolateCheckBox.isChecked
 
         var price: Int = calculatePrice(quantity)
-        var priceMessage: String = createOrderSummary(price, hasWhippedCream)
+        var priceMessage: String = createOrderSummary(price, hasWhippedCream, nameText)
         displayMessage(priceMessage)
     }
 
@@ -61,10 +66,11 @@ class MainActivity : AppCompatActivity() {
      *
      * @return Summary
      */
-    fun createOrderSummary(totalPrice: Int, hasWhippedCream: Boolean): String {
+    fun createOrderSummary(totalPrice: Int, hasWhippedCream: Boolean, nameText: Editable): String {
         String
-        var priceMessage = "Name: Amethyst George Solomon " +
+        var priceMessage = "Name: " + nameText +
                 "\nAdd Whipped Cream " + hasWhippedCream +
+                "\nAdd Chocolate " + hasChocolate +
                 "\nQuantity: " + quantity +
                 "\nTotal: " + "$" + totalPrice +
                 "\nThank You!"
