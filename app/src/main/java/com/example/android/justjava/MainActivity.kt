@@ -11,6 +11,7 @@ package com.example.android.justjava
 import java.text.NumberFormat;
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.TextView
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     var quantity: Int = 0
     var pricePerCoffee = 5
+    var hasWhippedCream: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +35,14 @@ class MainActivity : AppCompatActivity() {
      * This method is called when the order button is clicked.
      */
     fun submitOrder(view: View) {
-        Int
-        var price = calculatePrice(quantity)
-        String
-        var priceMessage = createOrderSummary(price)
+        val whippedCreamCheckBox = findViewById<CheckBox>(R.id.whippedCreamCheckboxid)
+        Log.i("SubmitOrder","outside whipped cream check")
+        if (whippedCreamCheckBox.isChecked){
+            hasWhippedCream = true
+        }
+
+        var price: Int = calculatePrice(quantity)
+        var priceMessage: String = createOrderSummary(price, hasWhippedCream)
         displayMessage(priceMessage)
     }
 
@@ -55,10 +61,10 @@ class MainActivity : AppCompatActivity() {
      *
      * @return Summary
      */
-    fun createOrderSummary(totalPrice: Int): String {
+    fun createOrderSummary(totalPrice: Int, hasWhippedCream: Boolean): String {
         String
         var priceMessage = "Name: Amethyst George Solomon " +
-                "\nAdd Whipped Cream " + quantity +
+                "\nAdd Whipped Cream " + hasWhippedCream +
                 "\nQuantity: " + quantity +
                 "\nTotal: " + "$" + totalPrice +
                 "\nThank You!"
@@ -97,3 +103,5 @@ class MainActivity : AppCompatActivity() {
         orderSummaryTextView.text = message
     }
 }
+
+
