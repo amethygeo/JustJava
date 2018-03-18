@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     fun submitOrder(view: View) {
         var nameTextView = findViewById<View>(R.id.name_id) as EditText
         var nameText: Editable = nameTextView.text
+        var nameString : String = nameText.toString()
         val whippedCreamCheckBox = findViewById<CheckBox>(R.id.whippedCreamCheckboxid)
         hasWhippedCream = whippedCreamCheckBox.isChecked
 
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         hasChocolate = chocolateCheckBox.isChecked
 
         var price: Int = calculatePrice(quantity)
-        var priceMessage: String = createOrderSummary(price, hasWhippedCream, nameText)
+        var priceMessage: String = createOrderSummary(price, hasWhippedCream, nameString)
         displayMessage(priceMessage)
     }
 
@@ -66,9 +67,9 @@ class MainActivity : AppCompatActivity() {
      *
      * @return Summary
      */
-    fun createOrderSummary(totalPrice: Int, hasWhippedCream: Boolean, nameText: Editable): String {
+    fun createOrderSummary(totalPrice: Int, hasWhippedCream: Boolean, nameString: String): String {
         String
-        var priceMessage = "Name: " + nameText +
+        var priceMessage = "Name: " + nameString +
                 "\nAdd Whipped Cream " + hasWhippedCream +
                 "\nAdd Chocolate " + hasChocolate +
                 "\nQuantity: " + quantity +
