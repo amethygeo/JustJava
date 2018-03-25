@@ -8,8 +8,11 @@
 
 package com.example.android.justjava
 
+import android.content.Intent
+import android.net.Uri
 import java.text.NumberFormat;
 import android.os.Bundle
+import android.os.Message
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.util.Log
@@ -17,6 +20,7 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -26,8 +30,11 @@ class MainActivity : AppCompatActivity() {
 
     var quantity: Int = 0
     var pricePerCoffee = 5
+    var priceWhippedCream = 1
+    var priceChocolate = 2
     var hasWhippedCream: Boolean = false
     var hasChocolate: Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,15 +56,37 @@ class MainActivity : AppCompatActivity() {
 
         var price: Int = calculatePrice(quantity)
         var priceMessage: String = createOrderSummary(price, hasWhippedCream, nameString)
-        displayMessage(priceMessage)
+        sendMail(priceMessage, nameString)
+    /**    displayMessage(priceMessage) */
     }
 
+    /**
+     * This method is called to connect with Email app.
+     *
+     * @return total price
+     */
+    fun sendMail(priceMessage: String, nameString: String){
+
+        val subject = "JustJava order for" + nameString
+        val message: String = priceMessage
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.setData(Uri.parse("mailto:"))
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        intent.putExtra(Intent.EXTRA_TEXT, message)
+            startActivity(Intent.createChooser(intent, "Send Email using:"))
+    }
     /**
      * This method is called when the total price is calculated.
      *
      * @return total price
      */
     fun calculatePrice(numberOfCoffee: Int): Int {
+        if (hasWhippedCream == true) {
+            pricePerCoffee = pricePerCoffee + priceWhippedCream
+        }
+        if (hasChocolate == true) {
+            pricePerCoffee = pricePerCoffee + priceChocolate
+        }
         return numberOfCoffee * pricePerCoffee
 
     }
@@ -74,7 +103,7 @@ class MainActivity : AppCompatActivity() {
                 "\nAdd Chocolate " + hasChocolate +
                 "\nQuantity: " + quantity +
                 "\nTotal: " + "$" + totalPrice +
-                "\nThank You!"
+                "\n" + getString(R.string.Thank_You)
         return priceMessage
     }
 
@@ -82,16 +111,22 @@ class MainActivity : AppCompatActivity() {
      * This method is called when the plus button is clicked.
      */
     fun increment(view: View) {
-        quantity = quantity + 1
-        displayQuantity(quantity)
+        if (quantity < 100) {
+            quantity = quantity + 1
+            displayQuantity(quantity)
+        }
     }
 
     /**
      * This method is called when the minus button is clicked.
      */
     fun decrement(view: View) {
-        quantity = quantity - 1
-        displayQuantity(quantity)
+        if (quantity > 0) {
+            quantity = quantity - 1
+            displayQuantity(quantity)
+        } else {
+            Toast.makeText(this, "Minimum number of coffees is 1", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**

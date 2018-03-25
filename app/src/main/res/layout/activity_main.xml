@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:paddingLeft="24dp"
-            android:text="Whipped Cream"
+            android:text="@string/whipped_cream"
             android:textSize="16sp" />
 
         <CheckBox
